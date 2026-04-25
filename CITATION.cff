@@ -1,0 +1,22 @@
+cff-version: 1.2.0
+message: "If you use this implementation, please cite the original paper."
+type: software
+title: "LDStega: Unofficial PyTorch Implementation"
+authors:
+  - name: "Armin Agalyan"
+    orcid: ""
+repository-code: "https://github.com/Armin2/ldstega-unofficial"
+license: MIT
+references:
+  - type: conference-paper
+    title: "LDStega: Practical and Robust Generative Image Steganography based on Latent Diffusion Models"
+    authors:
+      - family-names: "Jiang"
+        given-names: "Yuwei"
+      - family-names: "Li"
+        given-names: "Zhongliang"
+      - family-names: "Qian"
+        given-names: "Zhenxing"
+    collection-title: "Proceedings of the 32nd ACM International Conference on Multimedia (MM '24)"
+    year: 2024
+    doi: "10.1145/3664647.3681063"

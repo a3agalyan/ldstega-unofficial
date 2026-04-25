@@ -1,0 +1,54 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+dist/
+build/
+*.so
+
+# Virtual environments
+.venv/
+venv/
+.python-version
+
+# Jupyter
+.ipynb_checkpoints/
+notebooks/results/
+notebooks/img_results/
+
+# Models (HuggingFace cache)
+models/
+*.safetensors
+*.bin
+*.ckpt
+*.pt
+*.pth
+
+# Results (large pre-computed data — regenerate locally)
+results/
+
+# Images generated during runs
+*.png
+*.jpg
+*.jpeg
+*.webp
+# Exception: keep committed assets
+!notebooks/assets/*.png
+
+# Lock files
+uv.lock
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Internal
+CLAUDE.md
+.claude/
+
+# Environment
+.env
