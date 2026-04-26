@@ -5,10 +5,6 @@ description = "Unofficial PyTorch implementation of LDStega: Practical and Robus
 readme = "README.md"
 requires-python = ">=3.11"
 license = { text = "MIT" }
-
-[project.urls]
-Repository = "https://github.com/Armin2/ldstega-unofficial"
-
 dependencies = [
     "accelerate>=1.12.0",
     "diffusers>=0.36.0",
@@ -25,3 +21,6 @@ dependencies = [
     "torchvision>=0.25.0",
     "transformers>=5.0.0",
 ]
+
+[project.urls]
+Repository = "https://github.com/a3agalyan/ldstega-unofficial"

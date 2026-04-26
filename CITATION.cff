@@ -5,7 +5,7 @@ title: "LDStega: Unofficial PyTorch Implementation"
 authors:
   - name: "Armin Agalyan"
     orcid: ""
-repository-code: "https://github.com/Armin2/ldstega-unofficial"
+repository-code: "https://github.com/a3agalyan/ldstega-unofficial"
 license: MIT
 references:
   - type: conference-paper
