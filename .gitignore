@@ -27,11 +27,7 @@ models/
 # Results (large pre-computed data — regenerate locally)
 results/
 
-# Images generated during runs
-*.png
-*.jpg
-*.jpeg
-*.webp
+
 # Exception: keep committed assets
 !notebooks/assets/*.png
 

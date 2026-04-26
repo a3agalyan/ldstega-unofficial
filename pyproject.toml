@@ -7,7 +7,7 @@ requires-python = ">=3.11"
 license = { text = "MIT" }
 dependencies = [
     "accelerate>=1.12.0",
-    "diffusers>=0.36.0",
+    "diffusers>=0.36.0,<0.37",
     "matplotlib>=3.10.8",
     "opencv-python>=4.13.0.92",
     "pandas>=3.0.0",
@@ -17,10 +17,20 @@ dependencies = [
     "scipy>=1.17.0",
     "seaborn>=0.13.2",
     "tqdm>=4.66.0",
-    "torch>=2.10.0",
-    "torchvision>=0.25.0",
+    "torch>=2.3.0,<2.5",
+    "torchvision>=0.18.0,<0.20",
     "transformers>=5.0.0",
+    "ipykernel>=7.2.0",
 ]
 
 [project.urls]
 Repository = "https://github.com/a3agalyan/ldstega-unofficial"
+
+[tool.uv.sources]
+torch = { index = "pytorch-cu121" }
+torchvision = { index = "pytorch-cu121" }
+
+[[tool.uv.index]]
+name = "pytorch-cu121"
+url = "https://download.pytorch.org/whl/cu121"
+explicit = true

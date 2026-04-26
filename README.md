@@ -8,6 +8,8 @@ Unofficial implementation of **"LDStega: Practical and Robust Generative Image S
 
 This is not an official release — results diverge significantly from the paper's claims. The ~99% bit accuracy was not reproduced across any model or parameter setting. Performance is also highly seed-dependent (>10% std at 1024-bit payloads).
 
+
+![alt text](images/stega_output.png)
 ---
 
 ## How it works
