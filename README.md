@@ -6,7 +6,7 @@ Unofficial implementation of **"LDStega: Practical and Robust Generative Image S
 
 **Read [WRITEUP.md](WRITEUP.md) before using this code.**
 
-This is not an official release — results diverge significantly from the paper's claims. The ~99% bit accuracy was not reproduced across any model or parameter setting. Performance is also highly seed-dependent (>10% std at 1024-bit payloads).
+This is not an official release — results diverge significantly from the paper's claims. The ~99% bit accuracy was not reproduced across any model or parameter setting. Performance is also seed-dependent (~3% std at 512-bit payloads).
 
 
 ![alt text](images/stega_output.png)

@@ -1,5 +1,5 @@
 ## TLDR:
-My aim was to replicate the algorithm described in the paper, but could not achieve similar results. The best bit accuracy reached was ~95%, consistently below the paper's claimed ~99%, and the method turns out to be quite sensitive to JPEG compression and other common image transforms. Variance across multiple seeds is enough to raise concerns about the stability of the this method.
+My aim was to replicate the algorithm described in the paper, but could not achieve similar results. The best bit accuracy reached was ~95%, consistently below the paper's claimed ~99%, and the method turns out to be quite sensitive to JPEG compression and other common image transforms. Moreover, accuracy deviation across multiple seeds is enough to raise concerns about the stability of the this method.
 
 Authors do not state the exact model they used, so exact replication is not possible. the paper's reported latent space (32×32×4, 256×256 images) is consistent with `CompVis/ldm-text2im-large-256`, though no model is named. I set aside the original benchmark dataset, as the primary objective was to validate the method itself, not to reproduce benchmark scores.
 
@@ -69,15 +69,15 @@ The best result achieved was ~95% bit accuracy, compared to the paper's claimed 
 ![alt text](images/sdxl_results.png)
 
 ### Seed instability
-An additional observation not discussed in the paper is the variance across random seeds (see [vertical error bars indicate the variance](images/gamma_optimum.png)). For 512-bit payloads, standard deviation of bit accuracy reached ~3% across seeds — modest in absolute terms, but notable given that it goes unacknowledged in the paper and adds to the overall picture of unreliable extraction.
+An additional observation not discussed in the paper is the variance across random seeds (see [vertical error bars indicate the variance](images/gamma_optimum.png)). For 512-bit payloads, standard deviation of bit accuracy reached ~3% across seeds — modest in absolute terms, but notable given that it goes unacknowledged in the paper.
 
 
 ## Final thoughts
 Three main findings emerged from this replication attempt:
-- **Results do not replicate**: The paper's claimed ~99% bit accuracy was not reproduced at any parameter setting across all four tested models; the best achieved was ~95%.
+- **Results do not replicate**: The paper's claimed ~99% bit accuracy was not reproduced at any parameter setting across all four tested models; the best achieved by SDXL was ~95%.
 - **Fragility under compression**: The method is highly sensitive to JPEG compression and real-world image transforms, which significantly limits its practical applicability.
 - **Optimal γ is reproducible**: The γ ≈ 0.3 sweet spot for the robustness/quality tradeoff was consistently observed across experiments.
-- **Seed variance is modest but unaddressed**: Standard deviation of ~3% across seeds is not catastrophic, but the paper makes no mention of it, which raises additional questions about the robustness of the reported results.
+- **Seed variance is modest but unaddressed**: Standard deviation of ~3% across seeds raises additional questions about the robustness of the reported results.
 
 My most likely explanation for the accuracy gap is that the paper used a specific model that is not publicly identified, making faithful replication impossible.
 
