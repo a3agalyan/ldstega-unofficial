@@ -741,7 +741,7 @@ class LDStega:
         # Step 5: Apply transfer format, then reconstruct latent Z'_T = E(transfer(X))
         with torch.no_grad():
             X_transferred = self._apply_transfer_format(X)
-            Z_T_prime = self.vae.encode(X_transferred).latent_dist.sample()
+            Z_T_prime = self.vae.encode(X_transferred).latent_dist.mode()
             Z_T_prime = Z_T_prime * self.vae.config.scaling_factor
 
         # Step 6: Compute discrepancy D = |Z_T - Z'_T|
@@ -841,7 +841,7 @@ class LDStega:
 
         # Step 1: Encode received image Z'^s_T = E(X^r)
         with torch.no_grad():
-            Z_T_stego_prime = self.vae.encode(stego_tensor).latent_dist.sample()
+            Z_T_stego_prime = self.vae.encode(stego_tensor).latent_dist.mode()
             Z_T_stego_prime = Z_T_stego_prime * self.vae.config.scaling_factor
 
         # Step 2-3: Regenerate Z_{T-1} using shared seed and prompt
@@ -855,7 +855,7 @@ class LDStega:
         with torch.no_grad():
             X = self.vae.decode(Z_T.float() / self.vae.config.scaling_factor).sample
             X_transferred = self._apply_transfer_format(X)
-            Z_T_prime = self.vae.encode(X_transferred).latent_dist.sample()
+            Z_T_prime = self.vae.encode(X_transferred).latent_dist.mode()
             Z_T_prime = Z_T_prime * self.vae.config.scaling_factor
 
         D = torch.abs(Z_T - Z_T_prime).cpu().numpy().flatten()

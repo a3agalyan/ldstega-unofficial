@@ -1,5 +1,5 @@
 ## TLDR:
-My aim was to replicate the algorithm described in the paper, but could not achieve similar results. The same level of accuracy was not achieved at any parameter sweep, and the method demonstrates considerable instability across different seeds — over 10% std of accuracy for 1024-bit length. 
+My aim was to replicate the algorithm described in the paper, but could not achieve similar results. The best bit accuracy reached was ~95%, consistently below the paper's claimed ~99%, and the method turns out to be quite sensitive to JPEG compression and other common image transforms. Variance across multiple seeds is enough to raise concerns about the stability of the this method.
 
 Authors do not state the exact model they used, so exact replication is not possible. the paper's reported latent space (32×32×4, 256×256 images) is consistent with `CompVis/ldm-text2im-large-256`, though no model is named. I set aside the original benchmark dataset, as the primary objective was to validate the method itself, not to reproduce benchmark scores.
 
@@ -36,6 +36,14 @@ The following models were tested:
 | Stable Diffusion 2.1 | `stabilityai/stable-diffusion-2-1` | 64×64×4 |
 | SDXL | `stabilityai/stable-diffusion-xl-base-1.0` | 128×128×4 |
 
+SDXL JPEG Compression Tests:
+
+    - Quality=90: 96.68% extraction accuracy
+
+    - Quality=70: 83.40% extraction accuracy
+
+    - Quality=50: 76.56% extraction accuracy
+
 ### Stable coordinates Latent discrepancy
 Observed number of elements in discrepancy $ D = Z'_T - Z_T $
 that fall in each of these
@@ -45,26 +53,31 @@ six intervals does match with those stated in the paper. However, it seems like 
 |-------------|-------------|
 | <img src="images/d_barplot.png" width="400" height="200"> | <img src="images/paper_reference.png" width="400" height="200"> |
 
-### Optimal $\gamma$
+### Finding optimal $\gamma$
 $\gamma$ controls a trade-off between PSNR (visual quality) and bit accuracy (robustness): lower $\gamma$ yields better image quality but weaker extraction, while higher $\gamma$ improves bit accuracy at the cost of perceptual fidelity. The paper identifies $\gamma$ ≈ 0.3 as the optimum balance point. 
 In my experiments I achieved a similar optimum at $\gamma$ = 0.3.
 
 ![alt text](images/gamma_optimum.png)
 
-### Overall quality results
-SDXL showed the most promising results, but even they are far from what is stated in the paper. The best result achieved was ~93% bit accuracy, compared to the paper's claimed ~99%.
+### Quality Report
+SDXL showed the most promising results, but even they are far from what is stated in the paper. 
 
-![alt text](images/sdxl_res.png)
+![alt text](images/q75.png)
+
+The best result achieved was ~95% bit accuracy, compared to the paper's claimed ~99%. If we take $\gamma = 0.3$ as the optimal value, we do not reach the quality level reported in the paper. Moreover, when additional compression is applied, the chart below demonstrates that the algorithm is highly sensitive to JPEG compression.
+
+![alt text](images/sdxl_results.png)
 
 ### Seed instability
-A significant finding not discussed in the paper is the high variance across random seeds (see [vertical error bars indicate the variance](images/gamma_optimum.png)). For 1024-bit payloads, standard deviation of bit accuracy exceeded 10% across seeds, making reliable extraction non-deterministic in practice.
+An additional observation not discussed in the paper is the variance across random seeds (see [vertical error bars indicate the variance](images/gamma_optimum.png)). For 512-bit payloads, standard deviation of bit accuracy reached ~3% across seeds — modest in absolute terms, but notable given that it goes unacknowledged in the paper and adds to the overall picture of unreliable extraction.
 
 
 ## Final thoughts
 Three main findings emerged from this replication attempt:
-- **Accuracy falls short**: The paper's claimed bit accuracy was not reproduced at any parameter setting across all four tested models.
-- **Optimal γ is reproducible**: The γ ≈ 0.3 sweet spot for the robustness/quality tradeoff was consistently observed.
-- **High seed variance**: Over 10% standard deviation in bit accuracy across seeds undermines the reliability of the method as presented.
+- **Results do not replicate**: The paper's claimed ~99% bit accuracy was not reproduced at any parameter setting across all four tested models; the best achieved was ~95%.
+- **Fragility under compression**: The method is highly sensitive to JPEG compression and real-world image transforms, which significantly limits its practical applicability.
+- **Optimal γ is reproducible**: The γ ≈ 0.3 sweet spot for the robustness/quality tradeoff was consistently observed across experiments.
+- **Seed variance is modest but unaddressed**: Standard deviation of ~3% across seeds is not catastrophic, but the paper makes no mention of it, which raises additional questions about the robustness of the reported results.
 
 My most likely explanation for the accuracy gap is that the paper used a specific model that is not publicly identified, making faithful replication impossible.
 
@@ -91,9 +104,7 @@ The benchmark was structured into five suites:
 | Double JPEG | JPEG Q85 → JPEG Q70 |
 | Screenshot | blur σ=0.3 → resize ×0.9 → JPEG Q90 → quantize 64 levels |
 
-**Parameter sweep** — γ ∈ {0.1, 0.2, 0.3, 0.5, 0.8, 1.0} × message length ∈ {256, 512, 1024, 2048, 4096} bits, all under JPEG Q75.
-
-**Stress tests** — extreme attacks to locate breaking points: JPEG Q10, resize ×0.25, heavy blur (kernel 11, σ=3.0), heavy noise (σ=0.1), and all four combined.
+**Parameter sweep** — $\gamma$ ∈ {0.1, 0.2, 0.3, 0.5, 0.8, 1.0} × message length ∈ {256, 512, 1024, 2048, 4096} bits, all under JPEG Q75.
 
 **Transfer format sweep** — image transfer format ∈ {none, PIL, PNG, JPEG Q95/Q75/Q50} crossed with the same γ and message-length grid, to isolate the effect of the encode–decode round-trip on D-score stability.
 

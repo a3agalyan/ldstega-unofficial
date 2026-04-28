@@ -28,9 +28,10 @@ models/
 results/
 
 
-# Exception: keep committed assets
-!notebooks/assets/*.png
-
+# Ignore images everywhere except the images/ folder
+*.png
+*.jpeg
+!images/*.png
 # Lock files
 uv.lock
 
